@@ -1,0 +1,60 @@
+*{
+    box-sizing: border-box;
+    margin: 0; padding: 0;
+}
+
+ body {
+    background-color: pink;
+ }
+
+ header {
+    padding-left: 10px;
+ }
+
+ h1 {
+    color: white;
+    
+ }
+
+ h2 {
+    color: white;
+ }
+
+ section p {
+    color: white;
+ }
+
+ section.mat {
+    background-color:palevioletred;
+    border: 1px solid white;
+    margin: 5px;
+    border-radius: 5px;
+ }
+
+ section h2 {
+    color: white;
+    padding-right: 10px;
+    border-radius: 5px;
+ }
+
+ section.levnad {
+    background-color:palevioletred;
+    border: 1px solid white;
+    margin: 5px;
+    border-radius: 5px;
+ }
+
+ /** Tablets */
+@media (min-width: 768px){
+
+}
+
+/** desktop */
+@media (min-width: 980px){
+
+}
+
+/** Large desktop */
+@media (min-width: 1200px){
+
+}

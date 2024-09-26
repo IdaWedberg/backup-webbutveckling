@@ -1,0 +1,411 @@
+DOM är en förkortning av Dokument Objekt Modellen och definierar objekt och egenskaper för alla html element. DOM är standardiserat av W3C. 
+När webbläsaren läser in en html-sida så skapar den en dokumentobjektmodell av sidan i form av en trädstruktur.
+<!DOCTYPE html>
+<html>
+<head>
+   <title>
+      JavaScript och DOM
+   </title>
+</head>
+<body>
+   <h1>Rubrik 1</h1>
+   <p>Lite text i ett stycke</p>
+   <p>Lite mer text</p>
+</body>
+</html> 
+
+
+
+
+JavaScript är ett klientskriptspråk, detta innebär att webbläsaren exekverar programmet. Med JavaScript kan man dynamiskt påverka dokumentobjektens olika egenskaper samt avläsa händelse som “musklick”. JavaScript är en dialekt av det standardiserade språket ECMAScript. 
+Se filmen "JavaScript och DOM Introduktion".
+Syftet med detta moment är endast att ge en orientering på hur JavaScript kan användas och fungerar.
+1 Funktioner/Metoder 
+I JavaScript används funktioner, function. Funktioners motsvarighet i Java heter metoder och fungerar på samma sätt. Kod som skrivs inuti en funktion körs endast då den anropas. Funktioner kan även ta emot parametrar och returnera värden.
+Nedan följer 3 exempel med funktioner och hur dessa anropas. För att se hur dessa funktioner implementeras i praktiken kan ni se i filmen "Praktisk JavaScript 1" i planeringen.
+/**
+* funktion som skriver ut ett namn
+*/
+function printMyName(){
+   document.write("Henrik Bygren");
+}
+
+printMyName(); // funktionen printName anropas
+
+
+/**
+* funktion som skriver ut ett namn
+* tar emot parametern name
+*/
+function printName(name){
+   document.write(name + "<br>");
+}
+
+printName("Lisa Larsson"); // funktionen printName anropas
+
+
+/**
+* funktion som adderar två tal och returnerar summan
+* tar emot parametrarna t1 och t2.
+* Dessa summeras och returneras
+*/
+function add(t1, t2){
+   let sum = t1 + t2;
+   return sum;
+}
+
+// anropar funktionen add med talen 4 och 3
+// resultatet sparas i variabeln summa.
+let summa = add(4, 3);
+
+document.write(summa); // skriver ut summan av talen 4 och 3.
+
+
+2 JavaScript som påverkar DOM-objekt 
+JavaScript kan infogas på samma sätt som css i ett html-dokument. Bäst är liksom css att läsa in koden från en separat fil i head-taggen.
+Skapa ett nytt projekt eller katalog där du gör tester. Skapa en fil index.html, om fantasin tryter så kopiera koden från färstasidan med följande tillägg i head. Se dock till att ha minst två p-element.
+<script src="script.js"></script>
+
+
+2.1 Ändra ett elements innehåll
+Skapa nu filen script.js med följande innehåll
+function init(){
+   document.getElementsByTagName('p')[0].innerHTML ="Punkt saknades...";
+}
+ 
+window.onload = init;
+
+
+Först skapar vi en funktion med namnet init. Sista raden är viktig, då den ser till att anropa funktionen init då hela sidan är laddad av webbläsaren. Detta är viktigt eftersom vi inte kan påverka sidan innan alla html-element är inlästa (laddade).
+I funktionen init skriver vi 
+document.getElementsByTagName('p')[0].innerHTML ="Punkt saknades...";
+
+
+Denna rad hämtar alla p-element och ändrar 1:a p-elementets innehåll till “Punkt saknades…". Där av [0] som talar om att det är det första p-elementet.
+Ändra till [1] på samma rad. Vad händer, och varför?
+Vanligt är att man ger de element man vill påverka ett index, id. Sätt ett id på valfritt element. Jag väljer första p-taggen och sätter id = “p1”.
+<p id = 'p1'>Lite text i ett stycke</p>
+
+
+För att ändra innehållet på p-elementet med id=p1 skriver vi
+function init(){
+   document.getElementById('p1').innerHTML ="Punkt saknades...";
+}
+ 
+window.onload = init;
+
+
+I och med att ett id endast kan förekomma en gång till endast ett element så returneras objektet direkt och inte i en array.
+2.2 Ändra ett elements stilmall
+Det är möjligt att ändra ett elements stilmall m.h.a. JavaScript.
+Skriv in följande i funktionen init
+   document.getElementById("p1").style.color = "Red";
+   document.getElementById("p1").style.background = "Green";
+   document.getElementById("p1").style.fontFamily = "Arial";
+ 
+   document.getElementsByTagName("h1")[0].style.fontSize = "small" ;
+
+
+och testa sidan.
+För att slippa skriva document.getElementById("p1") flera gånger kan man referera till elementet med en variabel.
+   let element = document.getElementById("p1");
+
+
+   element.style.color = "Red";
+   element.style.background = "Green";
+   element.style.fontFamily = "Arial";
+
+
+3 Händelselyssnare till DOM-objekt 
+Till alla DOM-objekt går det att trigga händelse som utlöses beroende på vad som sker. Fram tills nu har vi kunnat utlösa en händelse, vid klick på länk, då en ny sida visas.
+3.1 Olika typer av händelser
+Nedan beskrivs några händelser 
+Attribut
+Händelse
+click
+Musklick
+dblclick
+Dubbelklick med musen
+keydown
+En knapp trycks ned
+keyup
+En knapp släpps upp
+submit
+När ett formulär skall skickas
+mouseover
+Muspekaren går över objektet
+mouseleave
+Muspekaren lämnar objektet
+load
+Objektet har laddats
+
+3.2 Skapa en händelsehanterare
+Jag visar detta med några enkla exempel.
+3.2.1 Händelsen onclick
+Jag skapar ett program som ändrar textfärgen på elementet med id=’p1’ när man klickar på rubriken (id=’h1’). Lägg till id=’h1’ på rubriken som skall utlösa händelsen.
+script.js
+function init(){
+   document.getElementById("h1").onclick = click;
+}
+ 
+function click(){
+   document.getElementById("p1").style.color = "Red";
+}
+ 
+window.onload = init;
+
+
+Längst ner hittar vi, window.onload = init, som också är en händelselyssnare. Här anges att funktionen init skall “köras” när sidan laddats klart (DOM-trädet).
+I funktionen init skapar vi sedan händelsehanteraren för rubriken med id=’h1’ när händelsen “onclick” inträffar. Här anges också att funktionen “click” skall anropas vid klick-händelser.
+3.2.2 Dynamisk meny
+I momentet “Responsiv Webbdesign” skapade vi en meny som doldes för skärmar med låg upplösning. För att visa menyn “hovrade” man musen över en knapp. Detta skapade vi med hjälp av en lösning med hover i css.
+Jag kommer visa en avskalad variant där en meny blir synlig då man klickar på en knapp och döljs nästa gång man klickar på knappen.
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+   <title>
+      JavaScript och DOM
+   </title>
+   <link rel="stylesheet" href="css/styleSheet.css">
+   <script src="script.js"></script>
+   <meta charset="utf-8">
+</head>
+<body>
+   <header>
+     	<h1>Dynamisk meny</h1>
+     	<h2>Exempel 1</h2>
+  	<nav>
+     	   <a id="topMenuButton" href="#">☰</a>
+     	   <ul id="topMenu">
+        	<li><a href="#">Hem</a></li>
+        	<li><a href="#">HTML</a></li>
+        	<li><a href="#">CSS</a></li>
+        	<li><a href="#">Responsiv Webbdesign</a></li>
+        	<li><a href="#">Mobile First</a></li>
+        	<li><a href="#">Desktop First</a></li>
+        	<li><a href="#">Kontakt</a></li>
+     	   </ul>
+  	</nav>
+   </header>
+   <main>
+  	<section>
+     	   <img src="maskin.png" id = "largeImg" alt="Porträtt Henrik">
+  	</section>
+   </main> 
+</body>
+</html>
+
+
+css/styleSheet.css
+html {
+   font-size: 62.5%;
+}
+ 
+body{
+   font-size: 1.2rem;
+}
+ 
+header nav ul{
+   display: none;
+   position: absolute;
+   padding: 0;
+}
+header nav ul li{
+   list-style-type: none;
+}
+
+
+script.js
+let showMenue = true;
+ 
+function init(){
+   document.getElementById('topMenuButton').onclick = showHideMenu
+}
+ 
+function showHideMenu(e){
+   let element = document.getElementById('topMenu');
+ 
+   if(showMenue){
+  	element.style.display ="block";
+   }else{
+  	element.style.display ="none";
+   }
+   showMenue = !showMenue; // byter tillstånd
+}
+ 
+window.onload = init;
+
+
+I css-filen är ul satt till att inte visas(display: none). Övrigt i css- och index-filen kommenterar jag inte, utan går direkt in på JavaScript-filen.
+Överst deklareras en variabel showMenue med värdet true. Denna variabel håller koll på om menyn skall visas eller döljas.
+let showMenue = true;
+
+
+Längst ner anges att funktionen init skall anropas när sidan har lästs in av webbläsaren.
+window.onload = init;
+
+
+Funktionen init skapar en händelselyssnare till “knappen” med id=”topMenuButton”. Här anges att funktionen showHideMenu skall anropas då man klickar på “knappen”. 
+
+
+function init(){
+   document.getElementById('topMenuButton').onclick = showHideMenu
+}
+
+
+Vad händer då i funktionen showHideMenu? Jo, här skapar vi en referens till vår lista (ul) med variabeln element. I if-satsen kontrollerar vi om variabeln showMenue är true eller false. Därefter bestäms om vår ul skall visas eller inte. Sist så byter showMenue sitt värde.
+function showHideMenu(e){
+   let element = document.getElementById('topMenu');
+ 
+   if(showMenue){
+  	element.style.display ="block";
+   }else{
+  	element.style.display ="none";
+   }
+   showMenue = !showMenue; // byter tillstånd
+}
+
+
+3.2.3 Bildvisare* 
+Här visar jag en enkel bildvisare. När musen “hovrar” över de små bilderna (thumbs) visas dessa i bildvisaren ovanför. Skapa png-bilder med unika namn. De små bilderna skall ha samma namn som de stora men avslutas med “_thumb.png”.
+
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Bildvisare</title>
+	<script src="script.js"></script>
+	<link rel="stylesheet" href="css/styleSheet.css">
+</head>
+<body>
+	<header>
+    	<h1>Bildvisare</h1>
+	</header>
+	<main>
+    	<section id="imgViewer">
+        	<img src="images/maskin.png" id="largeImg" alt="Bildbehållare för bilderna i galleriet">
+        	<ul id="thumbs">
+                <li><img src="images/maskin_thumb.png" alt="Turingmaskinen"></li>
+                <li><img src="images/HenrikBygren_thumb.png" alt="Bild på Henrik Bygren"></li>
+        	</ul>
+    	</section>
+	</main>
+</body>
+</html>
+
+
+css/styleSheet.css
+ul#thumbs{
+   padding: 0;
+}
+ul#thumbs li{
+   list-style-type: none;
+   display: inline-block;
+   border: 2px solid grey;
+}
+ 
+ul#thumbs li img{
+   display:block; /** tar bort utrymmet i botten på bilden */
+}
+ 
+#largeImg{
+   border: 2px solid grey;
+}
+
+
+
+
+script.js
+function init(){
+   let element = document.getElementById('thumbs');
+   let imgList = element.getElementsByTagName('img');
+ 
+   for(let i = 0; i <imgList.length; i++){
+  	imgList[i].onmouseover = overImg;
+   }
+}
+ 
+function overImg(e){
+   let element = document.getElementById('largeImg');
+   let imgName = e.target.src.split("_")[0] + ".png";
+ 
+   element.src = imgName;
+}
+ 
+window.onload = init;
+
+
+Vi studerar filen script.js och börjar med funktionen init. 
+function init(){
+   let element = document.getElementById('thumbs');
+   let imgList = element.getElementsByTagName('img');
+ 
+   for(let i = 0; i <imgList.length; i++){
+  	imgList[i].onmouseover = overImg;
+   }
+}
+
+
+Först skapas en referens, element, till DOM-objektet med id=”thumbs”. Detta är ett ul-element som. innehåller två listobjekt med varsin bild. 
+På den andra raden skapas en array, imgList, med alla bilder som finns i vår ul med id=”thumbs”.
+Eftersom vi endast letar efter bilder i vår ul med id=”thumbs” så kan vi ha andra bilder på webbsidan utan att dessa läses in.
+I for-loopen tilldelas varje bild en händeselyssnare för “hover”, då kommer funktionen overImg att anropas.
+function overImg(e){
+   let element = document.getElementById('largeImg');
+   let imgName = e.target.src.split("_")[0] + ".png";
+ 
+   element.src = imgName;
+}
+
+I funktionen overImg skapas en referens, element, till vår stora bild med id=”largeImg”. 
+Rad två är lite mer komplicerad. Funktionens inparameter e kan vi använda för att få tag på det objekt som aktiverade händelsen, e.target. Med e.target.src.split("_")[0]  delar vi upp namnet på sökvägen till bilden där “_” är delaren. Första delen, position 0, blir då “images/maskin”. Därefter lägger vi till “.png”. Nu har vi sökvägen till motsvarande stor bild.
+På sista raden byter vi till den nya bilden (largeImg) med informationen vi plockade fram ovan.
+4 Formulär och JavaScript 
+Formulär används i html för att låta en användare mata in uppgifter. Förmågan att hantera uppgifter från formulär ligger utanför denna kurs. Detta kommer behandlas i kurserna Webbserverprogrammering 1 och Webbutveckling 2. Men, som Webbutvecklare bör man dock kunna skapa formulär med html och css.
+4.1 Enkel kalkylator
+4.1.1 Formuläret
+Ett formulär avgränsas med taggarna
+<form> och </form>
+
+
+Inuti formuläret kan man ha ett antal olika inmatningsrutor. Dessa är för tal. Finns även för text (type="text").
+<input type="number" id="x">
+<input type="number" id="y">
+
+	
+Ett antal inmatningsrutor som hör ihop i ett formulär kan grupperas med elementet fieldset. Här kan man även ange en rubrik för dessa med elementet legend. Dessa element kan utelämnas.
+<form id = "calcForm">
+    <fieldset>
+        <legend>Kalkylator</legend>
+        <input type="number" id="x"> +
+        <input type="number" id="y"> =
+        <output id="sum"></output>
+    </fieldset>
+</form>
+
+
+Här representerar elementet output resultatet av en beräkning.
+4.1.2 JavaScript till vårt formulär
+Vi kommer skapa en händelse för när något skrivs in i formulärets inmatningsrutor. Detta gör att beräkningen sker så fort något nytt börjar skrivas in i något av formulärets inmatningsrutor. Vi kommer endast beräkna summan av de två talen som skrivs in.
+script.js
+function init(){
+   document.getElementById('calcForm').oninput = calc;
+}
+ 
+function calc(){
+   let x = document.getElementById('x').value;
+   let y = document.getElementById('y').value;
+ 
+   let sum = x + y;
+ 
+   document.getElementById('sum').value = sum;
+}
+ 
+window.onload = init;
+
+
+
+
+
